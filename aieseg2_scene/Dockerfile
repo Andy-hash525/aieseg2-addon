@@ -6,8 +6,8 @@ WORKDIR /app
 
 COPY app.py /app/app.py
 COPY run.sh /app/run.sh
-COPY config.yaml /app/config.yaml
 
 RUN chmod +x /app/run.sh
+RUN ls -la /app
 
 CMD ["/app/run.sh"]
