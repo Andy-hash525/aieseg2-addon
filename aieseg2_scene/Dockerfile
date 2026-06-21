@@ -1,4 +1,4 @@
-FROM ghcr.io/home-assistant/base-python:3.12
+FROM ghcr.io/home-assistant/amd64-base-python:3.12
 
 RUN pip install requests beautifulsoup4 paho-mqtt
 
