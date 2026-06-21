@@ -1,24 +1,22 @@
 import os
+import time
 import requests
 import traceback
-import time
 from bs4 import BeautifulSoup
 import paho.mqtt.client as mqtt
 
-# ===== MQTT設定 =====
+# ===== MQTT =====
 MQTT_HOST = "core-mosquitto"
 MQTT_PORT = 1883
 
 MQTT_USER = os.getenv("MQTT_USER")
 MQTT_PASS = os.getenv("MQTT_PASSWORD")
-print("MQTT_USER:", MQTT_USER)
-print("MQTT_PASS:", MQTT_PASS)
+
+MQTT_TOPIC = "aiseg/scene/#"
 
 # ===== AiSEG2 =====
 HOST = "http://192.168.0.216"
 session = requests.Session()
-
-MQTT_TOPIC = "aiseg/scene/#"
 
 
 # ===== token取得 =====
@@ -59,6 +57,7 @@ def run_scene(scene_no):
 def on_message(client, userdata, msg):
     try:
         scene = int(msg.payload.decode())
+        print("[MQTT] scene:", scene)
         run_scene(scene)
     except Exception as e:
         print("[ERROR] mqtt:", e)
@@ -71,7 +70,7 @@ def on_connect(client, userdata, flags, rc):
 
 # ===== main =====
 def main():
-    print("=== AiSEG2 Add-on Starting ===")
+    print("=== AiSEG2 Scene Controller Starting ===")
 
     client = mqtt.Client()
 
@@ -84,7 +83,7 @@ def main():
     try:
         client.connect(MQTT_HOST, MQTT_PORT, 60)
     except Exception as e:
-        print("[FATAL] MQTT:", e)
+        print("[FATAL] MQTT connect failed:", e)
         return
 
     client.loop_forever()
@@ -96,5 +95,4 @@ if __name__ == "__main__":
     except Exception as e:
         print("[FATAL]", e)
         traceback.print_exc()
-        while True:
-            time.sleep(10)
+        time.sleep(10)
