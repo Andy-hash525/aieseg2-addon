@@ -11,3 +11,5 @@ RUN chmod +x /app/run.sh
 RUN ls -la /app
 
 CMD ["/app/run.sh"]
+
+RUN ls -la /app
