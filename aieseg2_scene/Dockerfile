@@ -6,4 +6,7 @@ WORKDIR /app
 
 COPY app.py /app/app.py
 
-CMD ["python3", "/app/app.py"]
+COPY run.sh /app/run.sh
+RUN chmod +x /app/run.sh
+
+CMD ["/app/run.sh"]
