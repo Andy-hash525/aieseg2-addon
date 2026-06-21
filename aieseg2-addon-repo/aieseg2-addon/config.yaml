@@ -1,0 +1,16 @@
+name: AiSEG2 Scene Controller
+slug: aieseg2_scene
+version: "1.0"
+description: "Control AiSEG2 scenes from Home Assistant"
+
+startup: services
+boot: auto
+host_network: true
+
+options:
+  host: "192.168.0.216"
+  mqtt_topic: "aiseg/scene/#"
+
+schema:
+  host: str
+  mqtt_topic: str
