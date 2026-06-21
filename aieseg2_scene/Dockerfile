@@ -1,4 +1,4 @@
-FROM ghcr.io/hassio-addons/base-python:3.11
+FROM ghcr.io/hassio-addons/base-python:latest
 
 RUN pip install requests beautifulsoup4 paho-mqtt
 
