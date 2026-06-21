@@ -8,8 +8,8 @@ COPY app.py /app/app.py
 COPY run.sh /app/run.sh
 
 RUN chmod +x /app/run.sh
+
+# ★ここ重要：中身確認ログ
 RUN ls -la /app
 
 CMD ["/app/run.sh"]
-
-RUN ls -la /app
