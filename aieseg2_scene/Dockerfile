@@ -1,5 +1,8 @@
 FROM python:3.11-slim
 
+RUN sed -i 's/\r$//' /app/run.sh
+RUN chmod +x /app/run.sh
+
 RUN pip install requests beautifulsoup4 paho-mqtt
 
 WORKDIR /app
