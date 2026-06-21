@@ -1,0 +1,21 @@
+name: AiSEG2 Scene Controller
+version: "1.0"
+slug: aieseg2_scene
+description: "Control AiSEG2 scenes via MQTT"
+
+startup: services
+boot: auto
+
+arch:
+  - amd64
+  - aarch64
+
+host_network: true
+
+options:
+  mqtt_user: "homeassistant"
+  mqtt_password: ""
+
+schema:
+  mqtt_user: str
+  mqtt_password: password
