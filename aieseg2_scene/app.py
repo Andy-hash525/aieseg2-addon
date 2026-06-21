@@ -1,14 +1,24 @@
-import os
+import subprocess
 import time
 import requests
 from bs4 import BeautifulSoup
 import paho.mqtt.client as mqtt
 
+# ===== HA設定取得（ここが本体）=====
+def config(key):
+    try:
+        return subprocess.check_output(
+            ["bashio", "config", key]
+        ).decode().strip()
+    except:
+        return ""
+
+
 MQTT_HOST = "core-mosquitto"
 MQTT_PORT = 1883
 
-MQTT_USER = os.getenv("MQTT_USER", "")
-MQTT_PASS = os.getenv("MQTT_PASSWORD", "")
+MQTT_USER = config("mqtt_user")
+MQTT_PASS = config("mqtt_password")
 
 MQTT_TOPIC = "aiseg/scene/#"
 
@@ -29,7 +39,7 @@ def get_token():
 def run_scene(scene_no):
     token = get_token()
     if not token:
-        print("no token")
+        print("[ERROR] no token")
         return
 
     url = f"{HOST}/action/devices/device/32i21"
@@ -41,25 +51,28 @@ def run_scene(scene_no):
     }
 
     session.post(url, data=data)
-    print("scene:", scene_no)
+    print("[OK] scene:", scene_no)
 
 
 def on_message(client, userdata, msg):
-    scene = int(msg.payload.decode())
-    run_scene(scene)
+    try:
+        scene = int(msg.payload.decode())
+        run_scene(scene)
+    except Exception as e:
+        print("[MQTT ERROR]", e)
 
 
 def on_connect(client, userdata, flags, rc):
-    print("MQTT connected:", rc)
+    print("[MQTT] connected:", rc)
     client.subscribe(MQTT_TOPIC)
 
 
 def main():
-    print("=== START ===")
+    print("=== AiSEG2 Scene Controller ===")
 
     client = mqtt.Client()
 
-    if MQTT_USER:
+    if MQTT_USER and MQTT_PASS:
         client.username_pw_set(MQTT_USER, MQTT_PASS)
 
     client.on_connect = on_connect
