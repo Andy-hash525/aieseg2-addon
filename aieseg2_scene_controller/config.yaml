@@ -1,8 +1,0 @@
-name: AiSEG2 Scene Controller
-version: "1.0"
-slug: aieseg2_scene
-description: "Control AiSEG2 scenes"
-arch:
-  - amd64
-startup: services
-boot: auto
